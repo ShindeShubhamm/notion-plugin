@@ -4,8 +4,11 @@ const Layout = (props) => {
     const { children } = props;
 
     return (
-        <div className='layout'>
-            <h2 className='heading'>Spreadsheet PLUGIN</h2>
+        <div className='main-layout'>
+            <div className='navbar'>
+                <h2 className='l-heading'>Spreadsheet PLUGIN</h2>
+                <div className='logout'></div>
+            </div>
             <div className='l-children'>{children}</div>
         </div>
     );

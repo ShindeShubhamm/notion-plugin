@@ -4,7 +4,6 @@ import Login from 'components/Login';
 import Spreadsheet from 'components/Spreadsheet';
 import PrivateRoutes from './PrivateRoutes';
 import Layout from 'components/layouts/Layout';
-import AuthLayout from 'components/layouts/AuthLayout';
 import PublicRoutes from './PublicRoutes';
 
 const AppRouter = (props) => {
@@ -18,23 +17,15 @@ const AppRouter = (props) => {
                         </Layout>
                     }
                 >
-                    <Route exact path='/' element={<Spreadsheet />} />
+                    <Route exact path='/app' element={<Spreadsheet />} />
                 </Route>
             </Route>
             <Route element={<PublicRoutes />}>
-                <Route
-                    element={
-                        <AuthLayout>
-                            <Outlet />
-                        </AuthLayout>
-                    }
-                >
-                    <Route exact path='/auth' element={<Login />} />
-                </Route>
+                <Route exact path='/' element={<Login />} />
             </Route>
 
             {/* Handle not found route */}
-            <Route path='*' element={<Navigate to='/auth' />} />
+            <Route path='*' element={<Navigate to='/' />} />
         </Routes>
     );
 };

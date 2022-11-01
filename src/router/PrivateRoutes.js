@@ -5,7 +5,7 @@ const PrivateRoutes = (props) => {
     return !!localStorage.getItem('code')?.trim() ? (
         <Outlet />
     ) : (
-        <Navigate to='/auth' />
+        <Navigate to='/' />
     );
 };
 

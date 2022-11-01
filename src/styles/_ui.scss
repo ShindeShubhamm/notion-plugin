@@ -1,0 +1,52 @@
+// SNACKBAR
+.snackbar {
+    position: fixed;
+    bottom: -50px;
+    left: 30px;
+    background-color: #444;
+    transition: bottom 0.1s ease;
+    padding: 12px 32px;
+    border-radius: 2px;
+    color: #ffffff;
+    z-index: 1000;
+}
+.sn-success {
+    background-color: $success;
+}
+.sn-error {
+    background-color: $error;
+}
+.sn-warning {
+    background-color: $warning;
+}
+.sn-info {
+    background-color: $info;
+}
+.message {
+    font-size: 14px;
+    font-weight: 500;
+}
+.snack-show {
+    bottom: 30px;
+}
+
+// BACKDROP
+.backdrop-open {
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    z-index: 999;
+    background-color: #aaaaaa66;
+    .loader {
+        position: fixed;
+        top: 10%;
+        left: 50%;
+        width: 500px;
+        transform: translate(-50%);
+    }
+}
+.backdrop-close {
+    display: none;
+}

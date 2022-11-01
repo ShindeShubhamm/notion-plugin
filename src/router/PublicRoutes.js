@@ -5,7 +5,7 @@ const PublicRoutes = (props) => {
     return !localStorage.getItem('code')?.trim() ? (
         <Outlet />
     ) : (
-        <Navigate to='/' />
+        <Navigate to='/app' />
     );
 };
 
