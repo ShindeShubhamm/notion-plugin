@@ -1,13 +1,12 @@
 import React from 'react';
-import Spreadsheet from './components/Spreadsheet';
+import AppRouter from './router/AppRouter';
 
-import './styles/global.scss';
+import 'styles/global.scss';
 
 const App = () => {
     return (
         <div className='App'>
-            <h1>hello react</h1>
-            <Spreadsheet />
+            <AppRouter />
         </div>
     );
 };
