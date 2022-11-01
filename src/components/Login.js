@@ -6,8 +6,7 @@ import { showBackdrop, showSnackbar } from 'lib/redux/slices/global';
 import { connect } from 'react-redux';
 import { fetchNotionData } from 'lib/redux/slices/notion';
 
-const authURL =
-    'https://api.notion.com/v1/oauth/authorize?client_id=fdafbe62-17d4-4c9a-8308-35296427991c&response_type=code&owner=user&redirect_uri=http%3A%2F%2Flocalhost%3A3000';
+const authURL = `https://api.notion.com/v1/oauth/authorize?client_id=fdafbe62-17d4-4c9a-8308-35296427991c&response_type=code&owner=user&redirect_uri=${process.env.REACT_APP_REDIRECT_URI}`;
 
 const Login = (props) => {
     const { showSnackbar, showBackdrop, fetchNotionData } = props;
