@@ -21,17 +21,7 @@ const Login = (props) => {
             return;
         }
         if (!!code?.trim()) {
-            localStorage.setItem('code', code);
-            // showSnackbar({
-            //     message: 'Authorization Successful!',
-            //     type: 'success',
-            // });
             fetchNotionData(code);
-            showSnackbar({
-                message: 'Fetching Data',
-                type: 'info',
-            });
-            showBackdrop();
         }
     }, [code]); // eslint-disable-line
 
@@ -45,7 +35,7 @@ const Login = (props) => {
                     onClick={showBackdrop}
                 >
                     <SiNotion className='icon' />
-                    <span className='text'>Authorize Notion</span>
+                    <span className='text'>Integrate</span>
                 </a>
             </div>
         </div>

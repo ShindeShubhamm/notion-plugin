@@ -9,7 +9,7 @@ const root = ReactDOM.createRoot(document.getElementById('root'));
 
 // refresh browser on local storage token delete
 window.addEventListener('storage', (e) => {
-    if (e.key === 'code') {
+    if (e.key === 'notion') {
         window.location.reload();
     }
 });
