@@ -1,7 +1,5 @@
 ## notion-public-plugin
 
----
-
 Project uses:
 
 ```
@@ -15,3 +13,5 @@ To run the project:
 npm i # install dependencies
 npm start # start server (:3000)
 ```
+
+![notion-plugin](https://github.com/shindeshubhamm/notion-plugin/blob/master/notion-plugin.png?raw=true)
