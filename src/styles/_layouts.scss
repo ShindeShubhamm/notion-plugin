@@ -1,2 +1,53 @@
 .main-layout {
+    height: 100vh;
+    overflow: hidden;
+    .navbar {
+        width: 88%;
+        margin: 0 auto 30px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 20px 20px;
+        .n-left {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            .notion-icon {
+                font-size: 28px;
+            }
+            .l-heading {
+                font-size: 18px;
+                font-weight: 600;
+                margin-left: 12px;
+                color: #222;
+            }
+        }
+        .n-right {
+            display: flex;
+            align-items: center;
+            .workspace-icon {
+                .w-icon {
+                    font-size: 30px;
+                }
+            }
+            .workspace-details {
+                .workspace-header {
+                    font-size: 10px;
+                    color: #6e6e6e;
+                    font-weight: 700;
+                    margin: 0;
+                }
+                .workspace-name {
+                    margin: 0;
+                    font-size: 14px;
+                }
+            }
+        }
+    }
+    .l-children {
+        width: 88%;
+        max-height: calc(100vh - 200px);
+        margin: 0 auto;
+        overflow: auto;
+    }
 }

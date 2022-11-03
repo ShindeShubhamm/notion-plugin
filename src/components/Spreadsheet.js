@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import Sheet from 'x-data-spreadsheet';
-
-// NOTION PAGE URL: https://shindeshubhamm.notion.site/Spreadsheet-Public-753bcd6951634806b90b646fb5c079f8
+import { connect } from 'react-redux';
+import { fetchPageData, searchNotionData } from 'lib/redux/slices/notion';
 
 const getSheetOptions = (data = {}) => {
     const { mode = 'edit' } = data;
@@ -10,10 +10,10 @@ const getSheetOptions = (data = {}) => {
         showToolbar: true,
         showGrid: true,
         showContextmenu: true,
-        view: {
-            height: () => document.documentElement.clientHeight,
-            width: () => document.documentElement.clientWidth,
-        },
+        // view: {
+        //     height: () => '1155px',
+        //     width: () => '729px',
+        // },
         row: {
             len: 100,
             height: 25,
@@ -33,7 +33,7 @@ const getSheetOptions = (data = {}) => {
             underline: false,
             color: '#0a0a0a',
             font: {
-                name: 'Helvetica',
+                name: 'Inter',
                 size: 10,
                 bold: false,
                 italic: false,
@@ -43,6 +43,14 @@ const getSheetOptions = (data = {}) => {
 };
 
 const Spreadsheet = (props) => {
+    const {
+        notionState = {},
+        pageData = {},
+        fetchPageData,
+        searchNotionData,
+    } = props;
+    const { notionData } = notionState;
+
     const sheetOptions = getSheetOptions();
 
     useEffect(() => {
@@ -52,6 +60,16 @@ const Spreadsheet = (props) => {
 
         s.validate();
     }, []); // eslint-disable-line
+
+    console.log(pageData);
+
+    useEffect(() => {
+        if (notionData) {
+            fetchPageData(notionData.duplicated_template_id);
+            searchNotionData();
+        }
+    }, [notionData]); // eslint-disable-line
+
     return (
         <div>
             Spreadsheet Component
@@ -60,4 +78,17 @@ const Spreadsheet = (props) => {
     );
 };
 
-export default Spreadsheet;
+const mapStateToProps = (state) => {
+    return {
+        notionState: state.notion,
+    };
+};
+
+const mapDispatchToProps = (dispatch) => {
+    return {
+        fetchPageData: (pageId) => dispatch(fetchPageData(pageId)),
+        searchNotionData: () => dispatch(searchNotionData()),
+    };
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Spreadsheet);

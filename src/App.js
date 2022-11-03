@@ -1,17 +1,27 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import AppRouter from './router/AppRouter';
 
-import 'styles/global.scss';
 import { connect } from 'react-redux';
 import Snackbar from 'components/ui/Snackbar';
 import { closeSnackbar } from 'lib/redux/slices/global';
 import Backdrop from 'components/ui/Backdrop';
+import { populateNotionData } from 'lib/redux/slices/notion';
+
+import 'styles/global.scss';
 
 const App = (props) => {
     const {
         global: { snackbar, backdrop },
         closeSnackbar,
+        populateNotionData,
     } = props;
+
+    useEffect(() => {
+        if (!!localStorage.getItem('notion')?.trim()) {
+            const notionData = JSON.parse(localStorage.getItem('notion'));
+            populateNotionData(notionData);
+        }
+    }, []); // eslint-disable-line
 
     return (
         <div className='App'>
@@ -31,6 +41,7 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
     return {
         closeSnackbar: () => dispatch(closeSnackbar()),
+        populateNotionData: (data) => dispatch(populateNotionData(data)),
     };
 };
 
