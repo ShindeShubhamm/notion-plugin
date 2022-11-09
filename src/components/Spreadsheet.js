@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import Sheet from 'x-data-spreadsheet';
 import { connect } from 'react-redux';
-import { fetchPageData, searchNotionData } from 'lib/redux/slices/notion';
+import { fetchPageData } from 'lib/redux/slices/notion';
 
 const getSheetOptions = (data = {}) => {
     const { mode = 'edit' } = data;
@@ -10,10 +10,10 @@ const getSheetOptions = (data = {}) => {
         showToolbar: true,
         showGrid: true,
         showContextmenu: true,
-        // view: {
-        //     height: () => '1155px',
-        //     width: () => '729px',
-        // },
+        view: {
+            height: () => document.documentElement.clientHeight,
+            width: () => document.documentElement.clientWidth,
+        },
         row: {
             len: 100,
             height: 25,
@@ -42,31 +42,50 @@ const getSheetOptions = (data = {}) => {
     };
 };
 
+const sampleData = {
+    name: 'sheet2',
+    freeze: 'A1',
+    styles: [],
+    merges: [],
+    rows: {
+        6: {
+            cells: {
+                3: {
+                    text: 'sdf',
+                },
+            },
+        },
+        len: 100,
+    },
+    cols: {
+        len: 26,
+    },
+    validations: [],
+    autofilter: {},
+};
+
 const Spreadsheet = (props) => {
-    const {
-        notionState = {},
-        pageData = {},
-        fetchPageData,
-        searchNotionData,
-    } = props;
-    const { notionData } = notionState;
+    const { notionState = {}, fetchPageData } = props;
+    const { notionData, tableData } = notionState;
 
     const sheetOptions = getSheetOptions();
 
     useEffect(() => {
-        const s = new Sheet('#x-spreadsheet-demo', sheetOptions)
-            .loadData({})
-            .change((data) => {});
-
-        s.validate();
-    }, []); // eslint-disable-line
-
-    console.log(pageData);
+        console.log(tableData);
+        console.log(sampleData);
+        if (tableData) {
+            const s = new Sheet('#x-spreadsheet-demo', sheetOptions)
+                .loadData(tableData)
+                .change((data) => {
+                    console.log(data);
+                });
+            s.validate();
+        }
+    }, [tableData]); // eslint-disable-line
 
     useEffect(() => {
         if (notionData) {
             fetchPageData(notionData.duplicated_template_id);
-            searchNotionData();
         }
     }, [notionData]); // eslint-disable-line
 
@@ -87,7 +106,6 @@ const mapStateToProps = (state) => {
 const mapDispatchToProps = (dispatch) => {
     return {
         fetchPageData: (pageId) => dispatch(fetchPageData(pageId)),
-        searchNotionData: () => dispatch(searchNotionData()),
     };
 };
 

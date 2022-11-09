@@ -6,7 +6,8 @@ const server = process.env.REACT_APP_SERVER_URL;
 
 const initialState = {
     notionData: null,
-    pageData: null,
+    pageData: [], // blocks of the page
+    tableData: null,
     searchResult: null,
 };
 
@@ -35,6 +36,49 @@ export const fetchNotionData = createAsyncThunk(
     }
 );
 
+const getTableFormattedData = (notionTable) => {
+    const formattedRows = {};
+
+    for (let i = 0; i < notionTable.length; i++) {
+        const {
+            table_row: { cells },
+        } = notionTable[i];
+        const formattedCells = {};
+        for (let j = 0; j < cells.length; j++) {
+            const { plain_text } = cells[j][0];
+            formattedCells[j + 1] = {
+                text: plain_text,
+            };
+        }
+        formattedRows[i + 1] = {
+            cells: formattedCells,
+        };
+    }
+    console.log(formattedRows);
+    return {
+        name: 'sheet2',
+        freeze: 'A1',
+        styles: [],
+        merges: [],
+        // rows: {
+        //     1: {
+        //         cells: {
+        //             2: {
+        //                 text: 'sdfsa',
+        //             },
+        //         },
+        //     },
+        //     len: 100,
+        // },
+        rows: { ...formattedRows },
+        cols: {
+            // len: 26,
+        },
+        validations: [],
+        autofilter: {},
+    };
+};
+
 export const fetchPageData = createAsyncThunk(
     'notion/fetchPageData',
     async (pageId, { dispatch, getState }) => {
@@ -43,35 +87,33 @@ export const fetchPageData = createAsyncThunk(
         } = getState();
         dispatch(showBackdrop());
         try {
-            const response = await axios.get(`${server}/pagedata/${pageId}`, {
-                headers: {
-                    Authorization: `Bearer ${notionData.access_token}`,
-                },
-            });
-            dispatch(hideBackdrop());
-            return response;
-        } catch (error) {
-            dispatch(hideBackdrop());
-            return null;
-        }
-    }
-);
+            const response = await axios.get(
+                `${server}/block_content/${pageId}/children`,
+                {
+                    headers: {
+                        Authorization: `Bearer ${notionData.access_token}`,
+                    },
+                }
+            );
+            const tableData = response.data.find(
+                (data) => data.type === 'table'
+            );
 
-export const searchNotionData = createAsyncThunk(
-    'notion/searchNotionData',
-    async (params, { dispatch, getState }) => {
-        const {
-            notion: { notionData },
-        } = getState();
-        dispatch(showBackdrop());
-        try {
-            const response = await axios.get(`${server}/search`, {
-                headers: {
-                    Authorization: `Bearer ${notionData.access_token}`,
-                },
-            });
+            const childResponse = await axios.get(
+                `${server}/block_content/${tableData.id}/children`,
+                {
+                    headers: {
+                        Authorization: `Bearer ${notionData.access_token}`,
+                    },
+                }
+            );
+
+            const tableFormattedData = getTableFormattedData(
+                childResponse.data
+            );
+            console.log(tableFormattedData);
             dispatch(hideBackdrop());
-            return response;
+            return tableFormattedData;
         } catch (error) {
             dispatch(hideBackdrop());
             return null;
@@ -92,10 +134,7 @@ export const notionSlice = createSlice({
             state.notionData = action.payload?.data;
         });
         builder.addCase(fetchPageData.fulfilled, (state, action) => {
-            state.pageData = action.payload?.data;
-        });
-        builder.addCase(searchNotionData.fulfilled, (state, action) => {
-            state.searchResult = action.payload?.data;
+            state.tableData = action.payload;
         });
     },
 });
